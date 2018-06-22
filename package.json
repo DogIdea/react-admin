@@ -3,8 +3,8 @@
   "installationMethod": "msi",
   "version": "1.7.0",
   "license": "BSD-2-Clause",
-  "scripts":{
-    "dev" : "node_modules/.bin/webpack-dev-server",
+  "scripts": {
+    "dev": "node_modules/.bin/webpack-dev-server",
     "dist": "node_modules/.bin/webpack -p"
   },
   "preferGlobal": true,
@@ -39,8 +39,8 @@
     "webpack-dev-server": "2.9.7"
   },
   "dependencies": {
-    "font-awesome": "^4.7.0",
     "react": "16.2.0",
-    "react-dom": "16.2.0"
+    "react-dom": "16.2.0",
+    "react-router-dom": "4.2.2"
   }
 }
