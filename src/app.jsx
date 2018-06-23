@@ -12,7 +12,8 @@ class App extends React.Component{
        <Layout>
           <Switch>
             <Route exact path="/" component={Home}/>
-            <Redirect from="*" to="/"/>
+            <Route exact path="/product" component={Home}/>
+            <Route exact path="/product-category" component={Home}/>
           </Switch>
         </Layout>
        </div>
