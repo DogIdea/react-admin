@@ -15,13 +15,21 @@ class ProductList extends React.Component {
       this.state ={
           list : [],
           pageNum:1,
+          listType: 'list'
       };
     }
     componentDidMount() {
         this.loadProductList();
     }
     loadProductList() {
-        _product.getProductList(this.state.pageNum).then((res) =>{
+        let listParam ={}
+        listParam.listType = this.state.listType;
+        listParam.pageNum = this.state.pageNum;
+        if(this.state.listType === 'search') {
+            listParam.searchType = this.state.searchType;
+            listParam.keyword = this.state.searchKeyword;
+        }
+        _product.getProductList(listParam).then((res) =>{
             this.setState(res)
         },(errMsg) =>{
             this.setState({
@@ -29,6 +37,17 @@ class ProductList extends React.Component {
             });
             _mm.erroTips(errMsg);
         });
+    }
+    onSearch(searchType,searchKeyword) {
+        let listType = searchKeyword === '' ? 'list' :'search';
+        this.setState({
+            listType: listType,
+            pageNum: 1,
+            searchType: searchType,
+            searchKeyword: searchKeyword
+        },()=>{
+            this.loadProductList();
+        })
     }
     onPageNumChange(pageNum) {
         this.setState({
@@ -62,8 +81,15 @@ class ProductList extends React.Component {
       ]
       return (
         <div id="page-wrapper">
-            <PageTitle title="商品列表"/>
-            <ListSearch/>
+            <PageTitle title="商品列表">
+                <div className="page-header-right">
+                    <Link to="/product/save" className="btn btn-primary">
+                        <i className="fa fa-plus"></i>
+                        <span>添加商品</span>
+                    </Link>
+                </div>
+            </PageTitle>
+            <ListSearch onSearch={(searchType,searchKeyword)=>{this.onSearch(searchType,searchKeyword)}}/>
             <TableList tableHeads={tableHeads}>
                     {
                         this.state.list.map((product,index) =>{

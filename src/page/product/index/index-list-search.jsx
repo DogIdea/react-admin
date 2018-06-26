@@ -4,7 +4,7 @@ class ListSearch extends React.Component{
     constructor(props) {
         super(props)
         this.state = {
-            searchType : '',
+            searchType : 'productId',
             searchKeyword : ''
         }
     }
@@ -18,6 +18,11 @@ class ListSearch extends React.Component{
     onSearch() {
         this.props.onSearch(this.state.searchType,this.state.searchKeyword)
     }
+    onSearchKeywordKeyUp(e) {
+        if(e.keyCode === 13){
+            this.onSearch();
+        }
+    }
     render() {
         return (
             <div className="row search-wrap">
@@ -30,7 +35,8 @@ class ListSearch extends React.Component{
                         </select>
                     </div>
                     <div className="form-group">
-                        <input name="searchKeyword" type="text" className="form-control" id="exampleInputPassword3" placeholder="关键词" onChange={(e) => this.onValueChange(e)}></input>
+                        <input name="searchKeyword" type="text" className="form-control" id="exampleInputPassword3" placeholder="关键词" 
+                        onKeyUp={(e)=>this.onSearchKeywordKeyUp(e)} onChange={(e) => this.onValueChange(e)}></input>
                     </div>
                     <button className="btn btn-primary" onClick={(e) => this.onSearch()}>搜索</button>
                   </div>
