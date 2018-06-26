@@ -30,8 +30,11 @@ class MUtil{
             result = queryString.match(reg);
         return result ? decodeURIComponent(result[2]) : null;
     }
+    successTips(successMsg){
+        alert(successMsg || '操作成功');
+    }
     errorTips(errMsg) {
-        alert(errMsg || '好像哪里不对了~')
+        alert(errMsg || '好像哪里不对了~');
     }
     setStorage(name,data) {
         let dataType = typeof data
