@@ -19,6 +19,15 @@ class Product{
             data: data
         })        
     }
+    getProduct(productId) {
+        return _mm.request({
+            type: 'post',
+            url: '/manage/product/detail.do',
+            data: {
+                productId: productId || 0
+            }
+        })
+    }
     setProductStatus(productInfo) {
         return _mm.request({
             type: 'post',

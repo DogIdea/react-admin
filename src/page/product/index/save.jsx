@@ -13,6 +13,7 @@ class Productsave extends React.Component{
   constructor(props) {
       super(props);
       this.state = {
+        id: this.props.match.params.pid,
         name: '',
         subtitle: '',
         categoryId: 0,
@@ -22,6 +23,26 @@ class Productsave extends React.Component{
         stock: '',
         detail: '',
         status: 1
+      }
+  }
+  componentDidMount() {
+      this.loadProduct()
+  }
+  loadProduct() {
+      if(this.state.id){
+          _product.getProduct(this.state.id).then((res)=>{
+            let images = res.subImages.split(',');
+            res.subImages =images.map((imgUri)=>{
+                return {
+                    uri:imgUri,
+                    url:res.imageHost + imgUri
+                }
+            })
+            res.defaultDetail = res.detail;
+            this.setState(res);
+          },(errMsg) =>{
+            _mm.errorTips(errMsg)
+          })
       }
   }
   onValueChange(e) {
@@ -43,7 +64,6 @@ class Productsave extends React.Component{
     this.setState({
         subImages :subImages
     });
-    console.log(subImages);
   }
   onUploadError(errMsg) {
     _mm.errorTips(errMsg);
@@ -60,7 +80,6 @@ class Productsave extends React.Component{
       this.setState({
           detail:value
       })
-      console.log(value);
   }
   getSubImagesString() {
       return this.state.subImages.map((image)=>image.uri).join(',');
@@ -77,6 +96,9 @@ class Productsave extends React.Component{
           status: this.state.status
       },
       productcheckResult = _product.checkProduct(product);
+      if(this.state.id) {
+        product.id =this.state.id;
+      } 
       if(productcheckResult.status){
           _product.saveProduct(product).then((res)=>{
             _mm.successTips(res);
@@ -87,7 +109,6 @@ class Productsave extends React.Component{
       }else {
         _mm.errorTips(productcheckResult.msg);
       }
-      console.log(product);
   }
   render() {
     return (
@@ -97,24 +118,24 @@ class Productsave extends React.Component{
                 <div className="form-group">
                     <label className="col-md-2 control-label">商品名称</label>
                     <div className="col-md-5">
-                        <input type="text" className="form-control" placeholder="请输入商品名称" name="name" onChange={(e)=>this.onValueChange(e)}></input>
+                        <input type="text" className="form-control" placeholder="请输入商品名称" value={this.state.name} name="name" onChange={(e)=>this.onValueChange(e)}></input>
                     </div>
                 </div>
                 <div className="form-group">
                     <label className="col-md-2 control-label">商品描述</label>
                     <div className="col-md-5">
-                        <input type="text" className="form-control" placeholder="请输入商品描述" name="subtitle" onChange={(e)=>this.onValueChange(e)}></input>
+                        <input type="text" className="form-control" placeholder="请输入商品描述" value={this.state.subtitle} name="subtitle" onChange={(e)=>this.onValueChange(e)}></input>
                     </div>
                 </div>
                 <div className="form-group">
                     <label className="col-md-2 control-label">所属分类</label>
-                    <CategorySelector onCategoryChange={(categoryId,parentCategoryId) => this.onCategoryChange(categoryId,parentCategoryId)}/>
+                    <CategorySelector categoryId={this.state.categoryId} parentCategoryId={this.state.parentCategoryId} onCategoryChange={(categoryId,parentCategoryId) => this.onCategoryChange(categoryId,parentCategoryId)}/>
                 </div>
                 <div className="form-group">
                     <label className="col-md-2 control-label">商品价格</label>
                     <div className="col-md-3">
                         <div className="input-group">
-                            <input type="number" className="form-control" placeholder="价格" name="price" onChange={(e)=>this.onValueChange(e)}></input>
+                            <input type="number" className="form-control" placeholder="价格" value={this.state.price} name="price" onChange={(e)=>this.onValueChange(e)}></input>
                             <span className="input-group-addon">元</span>
                         </div>
                     </div>
@@ -123,7 +144,7 @@ class Productsave extends React.Component{
                     <label className="col-md-2 control-label">商品库存</label>
                     <div className="col-md-3">
                         <div className="input-group">
-                            <input type="number" className="form-control" placeholder="库存" name="stock" onChange={(e)=>this.onValueChange(e)}></input>
+                            <input type="number" className="form-control" placeholder="库存" value={this.state.stock} name="stock" onChange={(e)=>this.onValueChange(e)}></input>
                             <span className="input-group-addon" >件</span>
                         </div>
                     </div>
@@ -145,7 +166,7 @@ class Productsave extends React.Component{
                 <div className="form-group">
                     <label className="col-md-2 control-label">商品详情</label>
                     <div className="col-md-10">
-                        <RichEditor onValueChange={(value) => this.onDetailValueChange(value)}/>
+                        <RichEditor detail={this.state.detail} defaultDetail={this.state.defaultDetail} onValueChange={(value) => this.onDetailValueChange(value)}/>
                     </div>
                 </div>
                 <div className="form-group">
