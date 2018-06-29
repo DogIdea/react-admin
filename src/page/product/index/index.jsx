@@ -35,7 +35,7 @@ class ProductList extends React.Component {
             this.setState({
                 list :[]
             });
-            _mm.erroTips(errMsg);
+            _mm.errorTips(errMsg);
         });
     }
     onSearch(searchType,searchKeyword) {
