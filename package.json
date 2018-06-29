@@ -5,7 +5,8 @@
   "license": "BSD-2-Clause",
   "scripts": {
     "dev": "node_modules/.bin/webpack-dev-server",
-    "dist": "node_modules/.bin/webpack -p"
+    "dist": "WEBPACK_ENV=online node_modules/.bin/webpack -p",
+    "dist_win": "set WEBPACK_ENV=online&& node_modules/.bin/webpack -p"
   },
   "preferGlobal": true,
   "description": "📦🐈 Fast, reliable, and secure dependency management.",
